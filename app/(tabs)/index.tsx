@@ -1,21 +1,20 @@
+import SHA256 from 'crypto-js/sha256';
+import * as Device from 'expo-device';
+import * as FileSystem from 'expo-file-system';
+import * as ImagePicker from 'expo-image-picker';
+import * as MediaLibrary from 'expo-media-library';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform
+    ActivityIndicator,
+    Image,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as Device from 'expo-device';
-import SHA256 from 'crypto-js/sha256';
-import * as MediaLibrary from 'expo-media-library';
-import * as FileSystem from 'expo-file-system';
-import { ActivityIndicator } from 'react-native';
 
 
 
@@ -98,7 +97,7 @@ const EncodeScreen = () => {
       formData.append('device_id', getHashedDeviceId());
       formData.append('secret', secret);
   
-      const response = await fetch('http://192.168.60.169:5000/encode', {
+      const response = await fetch('https://hacksheild-backend.onrender.com/encode', {
         method: 'POST',
         body: formData,
       });

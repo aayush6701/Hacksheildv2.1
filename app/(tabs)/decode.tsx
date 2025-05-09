@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as Device from 'expo-device';
 import SHA256 from 'crypto-js/sha256';
-import { Platform } from 'react-native';
+import * as Device from 'expo-device';
+import * as ImagePicker from 'expo-image-picker';
+import React, { useState } from 'react';
+import { ActivityIndicator, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 
 const DecodeScreen = () => {
@@ -78,7 +77,7 @@ const DecodeScreen = () => {
         formData.append('device_id', getHashedDeviceId());
 
         try {
-          const response = await fetch('http://192.168.60.169:5000/decode', {
+          const response = await fetch('https://hacksheild-backend.onrender.com/decode', {
             method: 'POST',
             body: formData,
           });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, SafeAreaView, Animated } from 'react-native';
+import { ActivityIndicator, Animated, FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 const BlockExplorer = () => {
   const [blocks, setBlocks] = useState([]);
@@ -9,7 +9,7 @@ const BlockExplorer = () => {
 
   const fetchBlocks = async () => {
     try {
-      const response = await fetch('http://192.168.60.169:5000/blocks');
+      const response = await fetch('https://hacksheild-backend.onrender.com/blocks');
       const data = await response.json();
       if (data.success) {
         setBlocks(data.blocks);
@@ -42,18 +42,26 @@ const BlockExplorer = () => {
   
     return () => clearInterval(interval);
   }, []);
+
+  type Block = {
+    hash: string;
+    device_id: string;
+    recipient: string;
+    timestamp: string;
+  };
   
 
-  const renderItem = ({ item, index }) => (
-    <Animated.View style={[styles.card, { opacity: fadeAnim }]}> 
-      <Text style={styles.blockTitle}>📦 Block #{blocks.length - index}</Text>
-      <View style={styles.row}><Text style={styles.label}>Hash:</Text><Text style={styles.value}>{item.hash?.slice(0, 12)}...</Text></View>
-      <View style={styles.row}><Text style={styles.label}>Device ID:</Text><Text style={styles.value}>{item.device_id}</Text></View>
-      <View style={styles.row}><Text style={styles.label}>Recipient:</Text><Text style={styles.value}>{item.recipient}</Text></View>
-      <View style={styles.row}><Text style={styles.label}>Timestamp:</Text><Text style={styles.value}>{item.timestamp?.split('T')[0] || '—'}</Text></View>
-      <View style={styles.statusBox}><Text style={styles.status}>✅ Valid Block</Text></View>
-    </Animated.View>
-  );
+  const renderItem = ({ item, index }: { item: Block; index: number }) => (
+  <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
+    <Text style={styles.blockTitle}>📦 Block #{blocks.length - index}</Text>
+    <View style={styles.row}><Text style={styles.label}>Hash:</Text><Text style={styles.value}>{item.hash?.slice(0, 12)}...</Text></View>
+    <View style={styles.row}><Text style={styles.label}>Device ID:</Text><Text style={styles.value}>{item.device_id}</Text></View>
+    <View style={styles.row}><Text style={styles.label}>Recipient:</Text><Text style={styles.value}>{item.recipient}</Text></View>
+    <View style={styles.row}><Text style={styles.label}>Timestamp:</Text><Text style={styles.value}>{item.timestamp?.split('T')[0] || '—'}</Text></View>
+    <View style={styles.statusBox}><Text style={styles.status}>✅ Valid Block</Text></View>
+  </Animated.View>
+);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,13 +69,14 @@ const BlockExplorer = () => {
         <ActivityIndicator size="large" color="#facc15" style={{ marginTop: 50 }} />
       ) : (
         <FlatList
-  data={blocks}
-  renderItem={renderItem}
-  keyExtractor={(item, index) => item.hash + index}
-  contentContainerStyle={{ padding: 16 }}
-  onRefresh={handleRefresh}
-  refreshing={refreshing}
-/>
+        data={blocks}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => item.hash + index}
+        contentContainerStyle={{ padding: 16 }}
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
+      />
+      
 
       )}
     </SafeAreaView>
